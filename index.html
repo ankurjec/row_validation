@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Validation</title>
+
+  <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pikaday@1.8.2/css/pikaday.css">
+  <link rel="stylesheet" media="screen" href="http://www.globalodds.org/file/handsontable/dist/handsontable.css">
+
+  <style type="text/css">
+    body {
+      background: white;
+      margin: 20px;
+    }
+
+    h2 {
+      margin: 20px 0;
+    }
+
+    .handsontable .myBg {
+      background: #f8ffa0;
+    }
+
+    .currentRow,
+    .highlight {
+      background-color: lightblue;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <h2>Validation</h2>
+
+  <div id="exampleGrid" class="dataTable"></div><button id="submitData" type="button"
+    class="btn btn-primary">Save</button>
+</body>
+<script>
+  const autosave = document.querySelector('#autosave');
+  const load = document.querySelector('#load');
+  const save = document.querySelector('#save');
+  var myData = [
+    ["Rice", '35', '4', '', '', '', ''],
+    ["Dal", '66', '', '', '', '', ''],
+    ["Paneer", '99', '', '', '', '', ''],
+    ["Mustard Oil", '88', '', '', '', '', '']
+  ];
+  // Empty validator
+  emptyValidator = function (value, callback) {
+    if (!value || 0 === value.length) {
+      console.log('false');
+      callback(false);
+    } else {
+      console.log('true');
+      callback(true);
+    }
+  };
+
+  emptyValidatorB = function (value, callback) {
+    //setTimeout(function(){
+    if (!value || 0 === value.length) {
+      console.log('false');
+      callback(false);
+    }
+    else {
+      console.log('true');
+      callback(true);
+    }
+    //}, 100);
+  };
+
+  // Handsontable options
+  hotOptions = {
+    colHeaders: ['Product', 'Price', 'Quantity', 'Stock', 'Mfg Date', 'Expiry Date', 'Seller'],
+    //minSpareRows: 1, 
+    minSpareCols: 1,
+
+    rowHeaders: true,
+    contextMenu: true,
+    colWidths: [240, 100, 100, 100, 100, 100, 100], allowInsertRow: false,
+    allowEmpty: false,
+    renderAllRows: true, multiSelect: false,
+    currentRowClassName: 'currentRow', enterMoves: { row: 0, col: 0 },
+    licenseKey: '25c6f-a4ec7-085c4-e4216-46340',
+
+    columns: [
+      {
+        type: 'text',
+        strict: true,
+        allowInvalid: false, allowInsertRow: false,
+        validator: emptyValidator
+      },
+      {
+        type: 'numeric',
+        allowInvalid: false, allowInsertRow: false,
+        // validator: emptyValidator
+      },
+      {
+        type: 'numeric',
+
+        allowInvalid: false, allowInsertRow: false,
+        //validator: emptyValidator
+      },
+      {
+        type: 'numeric', allowInsertRow: false,
+
+        allowInvalid: false
+
+      }, {
+        type: 'date',
+        dateFormat: 'MM/DD/YYYY', allowInsertRow: false,
+        correctFormat: true,
+        validator: emptyValidator, allowInvalid: false
+      }, {
+        type: 'date',
+        dateFormat: 'MM/DD/YYYY', allowInsertRow: false,
+        correctFormat: true,
+        validator: emptyValidator, allowInvalid: false
+      }, {
+        validator: emptyValidator, allowInsertRow: false, allowInvalid: false
+      },
+    ],
+    data: myData,
+  };
+
+  // Instantiate
+  var ht = new Handsontable(document.getElementById('exampleGrid'), hotOptions);
+
+  $('#submitData').click(function () {
+    // Get the data in the cells
+    var myTableData = ht.getData();
+
+    // If the last row is empty, remove it before validation
+    if (myTableData.length > 1 && ht.isEmptyRow(myTableData.length - 1)) {
+      // ht.updateSettings({minSpareRows: 0});
+
+      // Remove the last row if it's empty
+      ht.alter('remove_row', parseInt(myTableData.length - 1), keepEmptyRows = false);
+    }
+
+    // Validate the cells and submit the form via ajax or whatever
+    ht.validateCells(function (result, obj) {
+      if (result == true) {
+        console.log('submitted');
+      }
+      else {
+        console.log('bad form data')
+        //hotInstance.updateSettings({minSpareRows: 1});
+      }
+    });
+  });
+  hot.addHook('afterSelectionEnd', function (r, c) {
+
+
+    for (var i = 0; i < hot.countCols(); i++) {
+      hot.setCellMeta(r, i, 'className', 'myBg');
+    }
+    hot.render()
+  })
+
+</script>
+
+</html>
