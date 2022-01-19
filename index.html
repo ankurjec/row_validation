@@ -45,10 +45,10 @@
   const load = document.querySelector('#load');
   const save = document.querySelector('#save');
   var myData = [
-    ["Rice", '35', '4', '', '', '', ''],
-    ["Dal", '66', '', '', '', '', ''],
-    ["Paneer", '99', '', '', '', '', ''],
-    ["Mustard Oil", '88', '', '', '', '', '']
+    ["", '', '', '', '', '', ''],
+    ["", '', '', '', '', '', ''],
+    ["", '', '', '', '', '', ''],
+    ["", '', '', '', '', '', '']
   ];
   // Empty validator
   emptyValidator = function (value, callback) {
@@ -85,7 +85,7 @@
     colWidths: [240, 100, 100, 100, 100, 100, 100], allowInsertRow: false,
     allowEmpty: false,
     renderAllRows: true, multiSelect: false,
-    currentRowClassName: 'currentRow', enterMoves: { row: 0, col: 0 },
+    currentRowClassName: 'currentRow', enterMoves: { row: 0, col: 1 },
     licenseKey: '25c6f-a4ec7-085c4-e4216-46340',
 
     columns: [
